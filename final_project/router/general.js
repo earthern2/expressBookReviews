@@ -34,9 +34,26 @@ public_users.get('/',function (req, res) {
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
- });
+  // Fetch the book based on ISBN from the database or book list
+  const getByISBN = (isbn) => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const book = books[isbn];  // Use the numeric ISBN key to find the book
+        if (book) {
+          resolve(book); // If book is found, resolve the promise
+        } else {
+          reject({ status: 404, message: "Book not found" }); // Reject with error if book not found
+        }
+      }, 1000); // Simulating database delay
+    });
+  };
+
+  const isbn = req.params.isbn; // Retrieve the ISBN from the request parameters
+
+  getByISBN(isbn)
+    .then(result => res.json(result)) // Send book as a JSON response if found
+    .catch(error => res.status(error.status || 500).json({ message: error.message || "Error occurred" })); // Return error if not found
+});
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
