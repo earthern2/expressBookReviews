@@ -26,26 +26,49 @@ public_users.post("/register", (req,res) => {
   return res.status(201).json({ message: "User registered successfully" });
 });
 
-// Get the book list available in the shop
-public_users.get('/',function (req, res) {
+// Task 1 - Get the book list available in the shop
+// public_users.get('/',function (req, res) {
+//   // Simulate fetching books from a database or external source
+//   const getBooks = () => {
+//     return new Promise((resolve, reject) => {
+//       setTimeout(() => {
+//         resolve(books);
+//       }, 1000); // Adding delay to simulate fetching data
+//     });
+//   };
+
+//   // Fetch the books and send them as a JSON response
+//   getBooks()
+//     .then((books) => {
+//       res.json(books); // Automatically formats the JSON response with proper headers
+//     })
+//     .catch((err) => {
+//       console.error(err); // Log the error for debugging
+//       res.status(500).json({ error: "An error occurred while fetching the books." });
+//     });
+// });
+
+// Task - 10 Get the book list available in the shop
+public_users.get('/', async (req, res) => {
   // Simulate fetching books from a database or external source
   const getBooks = () => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        resolve(books);
+        resolve(books); // Resolve the books after a delay
       }, 1000); // Adding delay to simulate fetching data
     });
   };
 
-  // Fetch the books and send them as a JSON response
-  getBooks()
-    .then((books) => {
-      res.json(books); // Automatically formats the JSON response with proper headers
-    })
-    .catch((err) => {
-      console.error(err); // Log the error for debugging
-      res.status(500).json({ error: "An error occurred while fetching the books." });
-    });
+  try {
+    // Use await to get books
+    const fetchedBooks = await getBooks();
+    
+    // Send the fetched books as a JSON response
+    res.json(fetchedBooks); // Automatically formats the JSON response with proper headers
+  } catch (err) {
+    console.error(err); // Log the error for debugging
+    res.status(500).json({ error: "An error occurred while fetching the books." });
+  }
 });
 
 // Get book details based on ISBN
