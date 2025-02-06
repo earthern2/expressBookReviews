@@ -124,30 +124,61 @@ public_users.get('/isbn/:isbn', async (req, res) => {
     }
   });
   
-// Get book details based on author
-public_users.get('/author/:author',function (req, res) {
-  const author = req.params.author; // Retrieve the author from the request parameters
+// Task 3 - Get book details based on author
+// public_users.get('/author/:author',function (req, res) {
+//   const author = req.params.author; // Retrieve the author from the request parameters
 
-  // Function to get books by author
-  const getBooksByAuthor = (auth) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        // Filter books that match the provided author
-        const filteredBooks = Object.values(books).filter((book) => book.author === auth);
-        if (filteredBooks.length > 0) {
-          resolve(filteredBooks); // If books are found, resolve with the filtered books
-        } else {
-          reject(new Error("No books found by this author")); // Reject if no books found
-        }
-      }, 1000); // Simulate delay
-    });
-  };
+//   // Function to get books by author
+//   const getBooksByAuthor = (auth) => {
+//     return new Promise((resolve, reject) => {
+//       setTimeout(() => {
+//         // Filter books that match the provided author
+//         const filteredBooks = Object.values(books).filter((book) => book.author === auth);
+//         if (filteredBooks.length > 0) {
+//           resolve(filteredBooks); // If books are found, resolve with the filtered books
+//         } else {
+//           reject(new Error("No books found by this author")); // Reject if no books found
+//         }
+//       }, 1000); // Simulate delay
+//     });
+//   };
 
-  // Get books based on author and handle the response
-  getBooksByAuthor(author)
-    .then((filteredBooks) => res.json(filteredBooks)) // Send the filtered books as a JSON response
-    .catch((err) => res.status(400).json({ error: err.message })); // Return error if no books found
-});
+//   // Get books based on author and handle the response
+//   getBooksByAuthor(author)
+//     .then((filteredBooks) => res.json(filteredBooks)) // Send the filtered books as a JSON response
+//     .catch((err) => res.status(400).json({ error: err.message })); // Return error if no books found
+// });
+
+// Task 12 - Get book details based on author
+public_users.get('/author/:author', async (req, res) => {
+    const author = req.params.author; // Retrieve the author from the request parameters
+  
+    // Function to get books by author using async/await
+    const getBooksByAuthor = (auth) => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          // Filter books that match the provided author
+          const filteredBooks = Object.values(books).filter((book) => book.author === auth);
+          if (filteredBooks.length > 0) {
+            resolve(filteredBooks); // If books are found, resolve with the filtered books
+          } else {
+            reject(new Error("No books found by this author")); // Reject if no books found
+          }
+        }, 1000); // Simulate delay
+      });
+    };
+  
+    try {
+      // Await the result of getBooksByAuthor
+      const filteredBooks = await getBooksByAuthor(author);
+  
+      // Send the filtered books as a JSON response
+      res.json(filteredBooks);
+    } catch (err) {
+      // Return error if no books found or any other error occurs
+      res.status(400).json({ error: err.message });
+    }
+  });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
