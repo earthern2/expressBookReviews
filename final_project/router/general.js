@@ -4,7 +4,7 @@ let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
-
+// Task 6 - registering a new user
 public_users.post("/register", (req,res) => {
   // Retrieve username and password from the request body
   const { username, password } = req.body;
@@ -236,7 +236,7 @@ public_users.get('/title/:title', async (req, res) => {
     }
   });
 
-//  Get book review
+//  Task 5 - Get book review
 public_users.get('/review/:isbn',function (req, res) {
   const isbn = req.params.isbn; // Retrieve the ISBN from the request parameters
 
