@@ -180,7 +180,7 @@ public_users.get('/author/:author', async (req, res) => {
     }
   });
 
-// Get all books based on title
+// Task 4 - Get all books based on title
 public_users.get('/title/:title',function (req, res) {
   const title = req.params.title; // Retrieve the title from the request parameters
 
@@ -204,6 +204,37 @@ public_users.get('/title/:title',function (req, res) {
     .then((filteredBooks) => res.json(filteredBooks)) // Send the filtered books as a JSON response
     .catch((err) => res.status(400).json({ error: err.message })); // Return error if no books found
 });
+
+// Task 13 - Get all books based on title
+public_users.get('/title/:title', async (req, res) => {
+    const title = req.params.title; // Retrieve the title from the request parameters
+  
+    // Function to get books by title using async/await
+    const getBooksByTitle = (booktitle) => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          // Filter books that match the provided title
+          const filteredBooks = Object.values(books).filter((book) => book.title === booktitle);
+          if (filteredBooks.length > 0) {
+            resolve(filteredBooks); // If books are found, resolve with the filtered books
+          } else {
+            reject(new Error("No books found with this title")); // Reject if no books found
+          }
+        }, 1000); // Simulate delay
+      });
+    };
+  
+    try {
+      // Await the result of getBooksByTitle
+      const filteredBooks = await getBooksByTitle(title);
+  
+      // Send the filtered books as a JSON response
+      res.json(filteredBooks);
+    } catch (err) {
+      // Return error if no books found or any other error occurs
+      res.status(400).json({ error: err.message });
+    }
+  });
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
