@@ -107,8 +107,26 @@ public_users.get('/title/:title',function (req, res) {
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const isbn = req.params.isbn; // Retrieve the ISBN from the request parameters
+
+  // Function to get the book based on ISBN
+  const getByISBN = (isbn) => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const book = books[isbn]; // Find the book with the matching ISBN
+        if (book) {
+          resolve(book); // If book is found, resolve with the book
+        } else {
+          reject({ status: 404, message: "Book not found" }); // Reject with error if book not found
+        }
+      }, 1000); // Simulating database delay
+    });
+  };
+
+  // Get book reviews based on ISBN
+  getByISBN(isbn)
+    .then(result => res.json(result.reviews)) // Send the reviews as a JSON response
+    .catch(error => res.status(error.status || 500).json({ message: error.message || "Error occurred" })); // Return error if book not found
 });
 
 module.exports.general = public_users;
